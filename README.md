@@ -1,7 +1,7 @@
 # Unit13-challenge
 
 
-![Test Image 1](3DTest.png)
+![Test Image 1](https://github.com/natyrrr/Unit13-challenge/blob/master/Amazonlex.jpeg)
 
 ## Purpose
 
