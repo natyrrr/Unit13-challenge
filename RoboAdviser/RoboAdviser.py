@@ -24,7 +24,7 @@ def build_validation_result(is_valid, violated_slot, message_content):
     return {
         "isValid": is_valid,
         "violatedSlot": violated_slot,
-        "message": {"contentType": "PlainText", "content": message_content},
+        "message": {"contentType": "PlainText", "content": message_content}
     }
 def validate_data(age, investmentAmount, intent_request):
     """
@@ -34,14 +34,15 @@ def validate_data(age, investmentAmount, intent_request):
     # Validate that the user is over 0 but less than 65
     if age is not None:
         age= int(age)
-        if age > 65:
+        
+        if age < 0 or age > 65:
         
         
             return build_validation_result(
                 False,
                 "age",
-                "You should be less than 65 years old to use this service, "
-                "please provide a different age.",
+                "You're too old and should be retired by now! You should be less than 65 years old to use this service, "
+                "please provide a different age, Grandpa!",
             )
 
     # Validate the investment amount, it should be > 5000
@@ -49,12 +50,12 @@ def validate_data(age, investmentAmount, intent_request):
         investmentAmount = int(
             investmentAmount
         )  # Since parameters are strings it's important to cast values
-        if investmentAmount <= 5000:
+        if investmentAmount < 5000:
             return build_validation_result(
                 False,
                 "investmentAmount",
-                "The amount to invest should be greater than $5,000 dollars, "
-                "please provide a correct amount in USD to invest.",
+                "Don't be cheap! The amount to invest should be greater than $5,000 dollars, "
+                "please provide a correct amount in USD, at the very least monopoly money to invest.",
             )
 
     # A True results is returned if age or amount are valid
@@ -141,7 +142,7 @@ def recommend_portfolio(intent_request):
                 intent_request["currentIntent"]["name"],
                 slots,
                 validation_result["violatedSlot"],
-                validation_result["message"],)
+                validation_result["message"])
 
         ### YOUR DATA VALIDATION CODE ENDS HERE ###
 
@@ -155,18 +156,20 @@ def recommend_portfolio(intent_request):
     ### YOUR FINAL INVESTMENT RECOMMENDATION CODE STARTS HERE ###
 
     ### YOUR FINAL INVESTMENT RECOMMENDATION CODE ENDS HERE ###
-    if riskLevel == "None":
-        return "100% bonds (AGG), 0% equities (SPY)"
-    elif riskLevel == "Very low":
-        return "80% bonds (AGG), 20% equities (SPY)"
-    elif riskLevel == "Low":
-        return "60% bonds (AGG), 40% equities (SPY)"
-    elif riskLevel == "Medium":
-        return "40% bonds (AGG), 60% equities (SPY)"
-    elif riskLevel == "High":
-        return "20% bonds (AGG), 80% equities (SPY)"
+    
+        
+    if risk_level == "None":
+        initial_recommendation = "100% bonds (AGG), 0% equities (SPY)"
+    elif risk_level == "Very Low":
+        initial_recommendation = "80% bonds (AGG), 20% equities (SPY)"
+    elif risk_level == "Low":
+        initial_recommendation = "60% bonds (AGG), 40% equities (SPY)"
+    elif risk_level == "Medium":
+        initial_recommendation = "40% bonds (AGG), 60% equities (SPY)"
+    elif risk_level == "High":
+        initial_recommendation = "20% bonds (AGG), 80% equities (SPY)"
     else:
-        return "0% bonds (AGG), 100% equities (SPY)"
+        initial_recommendation = "0% bonds (AGG), 100% equities (SPY)"
 
     # Return a message with the initial recommendation based on the risk level.
     return close(
@@ -174,8 +177,8 @@ def recommend_portfolio(intent_request):
         "Fulfilled",
         {
             "contentType": "PlainText",
-            "content": """{} thank you for your information;
-            based on the risk level you defined, my recommendation is to choose an investment portfolio with {}
+            "content": """ {} , thank you for your information.In order to make your champagne and caviar dreams come true... 
+            Based on the risk level you defined, my recommendation is to choose an investment portfolio with {}
             """.format(
                 first_name, initial_recommendation
             ),
